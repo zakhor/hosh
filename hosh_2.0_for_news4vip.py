@@ -11,7 +11,7 @@ def hosh(url):
     date_last = int(re.findall('data-date=\"([0-9]+)\"', driver.page_source)[-1]) #最終書き込み時刻を取得
     date_now = int(time.time()) + 3600 * 9
     time_diff = date_now - date_last
-    print('date_last:\t' + date_last)
+    print('date_last:\t' + str(date_last))
     print('date_now:\t' + str(date_now))
     print('time_diff:\t' + str(time_diff) + 'sec')
     if time_interval < time_diff: #最終書き込み時刻からの経過時間が閾値を超えたら書き込む
