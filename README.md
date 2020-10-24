@@ -8,7 +8,7 @@
 * 検索するスレッドタイトル
 ## 必要なもの
 * Python（3.9で動作確認）
-
+* Selenium
 * ChromeDriver（86で動作確認）
 ## news4vip版、operatex版、liveanarachy版の違い
 news4vip版 ソースからUNIX時間を取得  
