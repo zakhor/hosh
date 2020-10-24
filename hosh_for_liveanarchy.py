@@ -14,10 +14,11 @@ def hosh(url):
     date_last = int(parse(date_last_raw[:10]+date_last_raw[13:]).timestamp())
     date_now = int(time.time())
     time_diff = date_now - date_last
-    print('date_last_raw:\t' + date_last_raw)
-    print('date_last:\t' + str(date_last))
-    print('date_now:\t' + str(date_now))
-    print('time_diff:\t' + str(time_diff) + 'sec')
+    print(
+    'date_last_raw:\t' + date_last_raw +
+    '\ndate_last:\t' + str(date_last) +
+    '\ndate_now:\t' + str(date_now) +
+    '\ntime_diff:\t' + str(time_diff) + 'sec')
     if time_interval < time_diff: #最終書き込み時刻からの経過時間が閾値を超えたら書き込む
       print('POST')
       driver.find_element_by_name('MESSAGE').send_keys(str(random.randint(0,10000000)) + message)
@@ -40,10 +41,10 @@ thread_list = 'https://agree.5ch.net/liveanarchy/subback.html'  #スレ一覧URL
 time_interval = 3480 #保守間隔（秒）
 target_title = 'テスト' #検索スレタイ
 message = '保守'  #書き込み時本文
-print('time_interval:\t' + str(time_interval))
-print('target_title:\t' + target_title)
-print('message:\t' + message) 
-
+print(
+'time_interval:\t' + str(time_interval) +
+'\ntarget_title:\t' + target_title +
+'\nmessage:\t' + message) 
 driver = webdriver.Chrome() #Chrome起動
 driver.implicitly_wait(10)
 

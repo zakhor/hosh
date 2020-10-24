@@ -11,9 +11,10 @@ def hosh(url):
     date_last = int(re.findall('data-date=\"([0-9]+)\"', driver.page_source)[-1]) #最終書き込み時刻を取得
     date_now = int(time.time()) + 3600 * 9
     time_diff = date_now - date_last
-    print('date_last:\t' + str(date_last))
-    print('date_now:\t' + str(date_now))
-    print('time_diff:\t' + str(time_diff) + 'sec')
+    print(
+    'date_last:\t' + str(date_last) +
+    '\ndate_now:\t' + str(date_now) +
+    '\ntime_diff:\t' + str(time_diff) + 'sec')
     if time_interval < time_diff: #最終書き込み時刻からの経過時間が閾値を超えたら書き込む
       print('POST')
       driver.find_element_by_name('FROM').send_keys(name)
@@ -39,10 +40,11 @@ time_interval = 3480 #保守間隔（秒）
 target_title = 'テスト' #検索スレタイ
 name = ''  #書き込み時名前
 message = '保守'  #書き込み時本文
-print('time_interval:\t' + str(time_interval))
-print('target_title:\t' + target_title)
-print('name:\t\t' + name)
-print('message:\t' + message) 
+print(
+'time_interval:\t' + str(time_interval) +
+'\ntarget_title:\t' + target_title +
+'\nname:\t\t' + name +
+'\nmessage:\t' + message)
 
 #Chrome起動
 driver = webdriver.Chrome()
