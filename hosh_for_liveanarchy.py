@@ -1,6 +1,10 @@
-import time
+# coding: utf-8
+import os
 import re
+import time
+import errno
 import random
+import configparser
 from dateutil.parser import parse
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -36,16 +40,23 @@ def hosh(url):
     driver.get(url)  
   print('THREAD ARCHIEVED')
 
-#設定
+#設定読み込み
+config_ini = configparser.ConfigParser()
+config_ini_path = 'config.ini'
+if not os.path.exists(config_ini_path):
+    raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), config_ini_path)
+config_ini.read(config_ini_path, encoding='utf-8')
 thread_list = 'https://agree.5ch.net/liveanarchy/subback.html'  #スレ一覧URL
-time_interval = 3480 #保守間隔（秒）
-target_title = 'テスト' #検索スレタイ
-message = '保守'  #書き込み時本文
+time_interval = int(config_ini['DEFAULT']['time_interval'])
+target_title = config_ini['DEFAULT']['target_title']
+message = config_ini['DEFAULT']['message']
 print(
 'time_interval:\t' + str(time_interval) +
 '\ntarget_title:\t' + target_title +
 '\nmessage:\t' + message) 
-driver = webdriver.Chrome() #Chrome起動
+
+#Chrome起動
+driver = webdriver.Chrome()
 driver.implicitly_wait(10)
 
 #実行部
