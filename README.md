@@ -10,10 +10,6 @@
 ## 必要なもの
 * Python（3.9で動作確認）
 * ChromeDriver（86で動作確認）
-## 更新履歴
-hosh_1.0 完成  
-hosh_1.1 処理が軽くなるように  
-hosh_2.0 スレを検索するように  
 ## news4vip版、operatex版、liveanarachy版の違い
 news4vip版 ソースからUNIX時間を取得  
 operatex版 書き込み時刻を解釈して取得  
