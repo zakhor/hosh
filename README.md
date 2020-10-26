@@ -9,7 +9,8 @@
 ## 必要なもの
 * Python 3.9
 * GoogleChrome 87.0.4280.27 beta (通常版やChrome Canaryだとヘッドレスモード・プライベートモードにできない)
-* chromedriver-binary 87.0.4280.20.0
+* chromedriver-binary 87.0.4280.20.0  
+  
 `python setup.py install`でまとめてインストールできる
 ## news4vip版、operatex版、liveanarachy版の違い
 #### news4vip版
