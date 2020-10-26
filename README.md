@@ -7,10 +7,14 @@
 * 保守間隔時間（秒）
 * 検索するスレッドタイトル
 ## 必要なもの
-* Python（3.9で動作確認）
-* Selenium
-* ChromeDriver（86で動作確認）
+* Python 3.9
+* GoogleChrome 87.0.4280.27 beta (通常版やChrome Canaryだとヘッドレスモード・プライベートモードにできない)
+* chromedriver-binary 87.0.4280.20.0
+`python setup.py install`でまとめてインストールできる
 ## news4vip版、operatex版、liveanarachy版の違い
-news4vip版 ソースからUNIX時間を取得  
-operatex版 書き込み時刻を解釈して取得  
-liveanarchy版 名前欄、メール欄の設定を削除しマルチポスト避けを本文に追加  
+#### news4vip版
+ソースからUNIX時間を取得
+#### operatex版
+書き込み時刻を解釈して取得
+#### liveanarchy版
+名前欄、メール欄の設定を削除しマルチポスト避けを本文に追加

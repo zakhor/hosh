@@ -5,8 +5,11 @@ import time
 import errno
 import requests
 import configparser
+import chromedriver_binary
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.options import Options
+
 
 #保守
 def hosh(url):
@@ -55,6 +58,9 @@ print(
 '\ntarget_title:\t' + target_title +
 '\nname:\t\t' + name +
 '\nmessage:\t' + message)
+options = Options() #chromedriver_binary及びchromeバージョン87のみで使えるコマンド
+options.add_argument('--headless')
+options.add_argument('--incognito')
 
 #実行部
 while 1:
@@ -67,9 +73,9 @@ while 1:
     time.sleep(time_interval) #待機
   else:
     print('THREAD FOUND')
-    url = 'https://hebi.5ch.net/test/read.cgi/news4vip/' + thread_number[0]
+    url = 'https://hebi.5ch.net/test/read.cgi/news4vip/' + thread_number[0].replace('l50', 'l0')
     print('url:\t\t'+url)
-    driver = webdriver.Chrome() #Chrome起動
+    driver = webdriver.Chrome(options=options) #Chrome起動
     driver.implicitly_wait(10)
     driver.get(url)  #スレを開く
     hosh(url) #保守
