@@ -9,8 +9,11 @@ import configparser
 import chromedriver_binary
 from dateutil.parser import parse
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import NoSuchElementException
 
 #保守
 def hosh(url):
@@ -26,13 +29,12 @@ def hosh(url):
     '\ndate_latest:\t' + str(date_latest) +
     '\ndate_now:\t' + str(date_now) +
     '\ntime_diff:\t' + str(time_diff) + 'sec')
-    if time_interval < time_diff: #最終書き込み時刻からの経過時間が閾値を超えたら書き込む
-      print('POST')
+    if time_diff >= time_interval: #最終書き込み時刻からの経過時間が閾値を超えたら書き込む      print('POST')
       driver.find_element_by_name('MESSAGE').send_keys(str(random.randint(0,10000000)) + message)
       driver.find_element_by_name("submit").click()
       try:  #Cookie切れ対応
-        driver.find_element_by_xpath('//input[@value="上記全てを承諾して書き込む"]').click()
-      except NoSuchElementException:
+        WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//input[@value=\"上記全てを承諾して書き込む\"]'))).click()
+      except TimeoutException:
         pass 
     else:
       print('NOT POST')
@@ -62,6 +64,7 @@ options.add_argument('--headless')
 options.add_argument('--incognito')
 
 #実行部
+driver = webdriver.Chrome(options=options) #Chrome起動
 while 1:
   response = requests.get(thread_list) #スレ一覧を開く
   response.encoding = response.apparent_encoding 
@@ -74,8 +77,5 @@ while 1:
     print('THREAD FOUND')
     url = 'https://hebi.5ch.net/test/read.cgi/news4vip/' + thread_number[0].replace('l50', 'l0')
     print('url:\t\t'+url)
-    driver = webdriver.Chrome() #Chrome起動
-    driver.implicitly_wait(10)
     driver.get(url)  #スレを開く
     hosh(url) #保守
-    driver.quit()
