@@ -25,6 +25,10 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
+
+# Python
+env/
+
 [Ll]og/
 
 # Visual Studio 2015/2017 cache/options directory

@@ -3,5 +3,6 @@
 ###### Requirements with Version Specifiers ######
 chromedriver-binary==87.0.4280.20.0
 iniconfig==1.1.1
+python-dateutil==2.8.1
 requests==2.24.0
 selenium==3.141.0
