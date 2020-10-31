@@ -8,7 +8,7 @@
 * 本文
 ## 必要なもの
 * Python 3.9    
-* 各種モジュール    
+* 各種モジュール（requirement.txtに記載）    
 `python setup.py install`でまとめてインストールできる
 ## news4vip版とoperatex版の違い
 #### news4vip版
