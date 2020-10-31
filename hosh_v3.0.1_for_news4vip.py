@@ -11,6 +11,9 @@ if platform.system() == "Windows":
   import winsound
 else:
   import os
+#----------------------------------------(data-date=NGの板用)----------------------------------------
+#from dateutil.parser import parse
+#---------------------------------------------------------------------------------------------------
 
 #初期化
 #設定読み込み
@@ -36,6 +39,9 @@ print(
 pattern_find_thread = '<a href=\"([0-9]{10})/l50\">.+?' + target + '.+?</a>'
 pattern_check_archived = '<div class=\"stoplight stopred stopdone\">'
 pattern_find_date_latest = 'data-date=\"([0-9]+)\"'
+#----------------------------------------(data-date=NGの板用)----------------------------------------
+#pattern_find_date_latest = '<span class=\"date\">(.+?)</span>'
+#---------------------------------------------------------------------------------------------------
 
 #定義
 #通知音を鳴らす
@@ -48,7 +54,7 @@ def beep():
 def wait(sec):
   for _ in tqdm(range(sec)):
     time.sleep(1)
-  beep() #音を鳴らす
+  beep() #通知音を鳴らす
 
 #投稿
 def post_message(domain, bbs, key):
@@ -75,6 +81,7 @@ def post_message(domain, bbs, key):
   r = requests.post(url_bbscgi,data=data,headers=headers,cookies=cookies)
   response = re.sub('<.*?>', '', str(r.text))
   print(response) #結果画面を表示
+  beep() #通知音を鳴らす
 
 #保守
 def hosh(domain, bbs, key):
@@ -86,6 +93,10 @@ def hosh(domain, bbs, key):
     print('THREAD NOT ARCHIEVED')
     time_wait = time_interval
     date_latest = int(re.findall(pattern_find_date_latest, response.text)[-1]) #最終書込時刻、現在時刻、差分を取得
+    #----------------------------------------(data-date=NGの板用)----------------------------------------
+    #date_latest_raw = re.findall(pattern_find_date_latest, response.text)[-1] 
+    #date_latest = int(parse(date_latest_raw[:10]+date_latest_raw[13:]).timestamp())
+    #---------------------------------------------------------------------------------------------------
     date_now = int(time.time()) + 60 * 60 * 9
     time_diff = date_now - date_latest
     print(
