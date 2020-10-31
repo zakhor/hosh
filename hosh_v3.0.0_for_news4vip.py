@@ -49,6 +49,7 @@ def wait(sec):
   for _ in tqdm(range(sec)):
     time.sleep(1)
   beep() #音を鳴らす
+
 #投稿
 def post_message(domain, bbs, key):
   url_thread = 'https://' + domain + '.5ch.net/test/read.cgi/' + bbs + '/' + key + '/l0'
@@ -74,6 +75,7 @@ def post_message(domain, bbs, key):
   r = requests.post(url_bbscgi,data=data,headers=headers,cookies=cookies)
   response = re.sub('<.*?>', '', str(r.text))
   print(response) #結果画面を表示
+
 #保守
 def hosh(domain, bbs, key):
   url_thread = 'https://' + domain + '.5ch.net/test/read.cgi/' + bbs + '/' + key + '/l0'
