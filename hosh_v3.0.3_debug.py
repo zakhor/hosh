@@ -42,10 +42,7 @@ def wait(sec):
   beep() #通知音を鳴らす
 
 #投稿
-def post_message(domain, bbs, key, time_interval, target, name, message):
-  time_interval = config_ini[th_num][0]
-  name = config_ini[th_num][2]
-  message = config_ini[th_num][3]
+def post_message(key, time_interval, target, name, message):
   mail = str(time_interval) + "秒"
   url_thread = 'https://' + domain + '.5ch.net/test/read.cgi/' + bbs + '/' + key + '/l0'
   time_now = str(int(time.time()))
@@ -69,13 +66,11 @@ def post_message(domain, bbs, key, time_interval, target, name, message):
   beep() #通知音を鳴らす
 
 #保守
-def hosh(domain, bbs, key, time_interval, target, name, message):
+def hosh(key, time_interval, target, name, message):
   url_thread = 'https://' + domain + '.5ch.net/test/read.cgi/' + bbs + '/' + key + '/l0'
-  print(f'url_thread:\t{url_thread}')
   response = requests.get(url_thread) #スレを読み込む
   time_interval = int(time_interval)
   while not re.search(pattern_check_archived, response.text):  #dat落ちまで繰り返す
-    print('THREAD NOT ARCHIEVED')
     time_wait = time_interval
     date_latest = int(re.findall(pattern_find_date_latest, response.text)[-1]) #最終書込時刻、現在時刻、差分を取得
     #----------------------------------------(data-date=NGの板用)----------------------------------------
@@ -84,34 +79,37 @@ def hosh(domain, bbs, key, time_interval, target, name, message):
     #---------------------------------------------------------------------------------------------------
     date_now = int(time.time()) + 60 * 60 * 9
     time_diff = date_now - date_latest
-    print(
+    print('THREAD FOUND'
+    f'url_thread:\t{url_thread}k\n'
+    'THREAD NOT ARCHIEVED\n'
     f'date_latest:\t{str(date_latest)}\n'
     f'date_now:\t{str(date_now)}\n'
     f'time_diff:\t{str(time_diff)}sec')
     if time_diff >= time_interval: #最終書き込み時刻からの経過時間が閾値を超えたら書き込む
-      print('POST')
-      post_message(domain, bbs, key, time_interval, target, name, message) #投稿
+      post_message(key, time_interval, target, name, message) #投稿
+      print('POST\n'
+      'WAIT')
     else: #超過予想時刻まで待機
-      print('NOT POST')
       time_wait = time_interval - time_diff
-    print('WAIT')
+      print('NOT POST\n'
+      'WAIT')
     wait(time_wait) #待機
     response = requests.get(url_thread)
-  print('THREAD ARCHIEVED')
+  print('THREAD FOUND'
+  'THREAD ARCHIEVED')
 
 #スレ検索
-def search_thread(th_num, time_interval, target, name, message):
+def search_thread(section, time_interval, target, name, message):
   while 1:
     response = requests.get('https://' + domain + '.5ch.net/' + bbs + '/subback.html') #スレ一覧を開く
     response.encoding = response.apparent_encoding 
     pattern_find_thread = '<a href=\"([0-9]{10})/l50\">.+?' + target + '.+?</a>'
     key = re.search(pattern_find_thread, response.text) #スレを検索
     if key: #スレが見つからなければ保守間隔分だけ待機
-      print('THREAD FOUND')
-      hosh(domain, bbs, key.groups()[0], time_interval, target, name, message) #保守
+      hosh(key.groups()[0], time_interval, target, name, message) #保守
     else:
-      print('THREAD NOT FOUND')
-      print('WAIT')
+      print('THREAD NOT FOUND\n'
+      'WAIT')
       wait(time_interval) #待機
 
 #実行部
@@ -123,16 +121,17 @@ if __name__ == '__main__':
   config_ini.read(config_ini_path, encoding='utf-8')
 
   th_list = []
-  for th_num in config_ini:
-    time_interval = int(config_ini[th_num]['time_interval'])
-    target = config_ini[th_num]['target']
-    name = config_ini[th_num]['name']
-    message = config_ini[th_num]['message']
+  for th_section in config_ini:
+    time_interval = int(config_ini[th_section]['time_interval'])
+    target = config_ini[th_section]['target']
+    name = config_ini[th_section]['name']
+    message = config_ini[th_section]['message']
     print(
+    f'th_section:\t{th_section}\n'
     f'time_interval:\t{str(time_interval)}\n'
     f'target:\t\t{target}\n'
     f'name:\t\t{name}\n'
     f'message:\t{message}')
-    th_list.append(threading.Thread(target=search_thread, args=(th_num, time_interval, target, name, message)))
+    th_list.append(threading.Thread(target=search_thread, args=(th_section, time_interval, target, name, message)))
   for th in th_list:
     th.start()
