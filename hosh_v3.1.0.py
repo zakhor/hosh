@@ -126,7 +126,7 @@ def search_thread(section, time_interval, target, name, message):
 #実行部
 if __name__ == '__main__':
   config_ini = configparser.ConfigParser()  #config.ini読み込み
-  config_ini_path = './Debug/config.ini'
+  config_ini_path = 'config.ini'
   if not os.path.exists(config_ini_path):
     raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), config_ini_path)
   config_ini.read(config_ini_path, encoding='utf-8')
