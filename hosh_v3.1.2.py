@@ -113,15 +113,15 @@ def search_thread(section, time_interval, target, name, message):
     response.encoding = 'Shift_JIS'
     pattern_find_thread = '<a href=\"([0-9]{10})/l50\">.+?' + target + '.+?</a>'
     key = re.search(pattern_find_thread, response.text) #スレを検索
-  if key: #スレが見つかったら保守
-      url_thread = 'https://' + domain + '.5ch.net/test/read.cgi/' + bbs + '/' + key.groups()[0] + '/l0'
-      print_lock('THREAD FOUND\n'
-      f'url_thread:\t{url_thread}\n', lock) 
-      hosh(key.groups()[0], time_interval, target, name, message) #保守
-  else: #スレが見つからなければ保守間隔分待機
-    print_lock('THREAD NOT FOUND\n'
-    'WAIT\n', lock)
-    wait(time_interval) #待機
+    if key: #スレが見つかったら保守
+        url_thread = 'https://' + domain + '.5ch.net/test/read.cgi/' + bbs + '/' + key.groups()[0] + '/l0'
+        print_lock('THREAD FOUND\n'
+        f'url_thread:\t{url_thread}\n', lock) 
+        hosh(key.groups()[0], time_interval, target, name, message) #保守
+    else: #スレが見つからなければ保守間隔分待機
+      print_lock('THREAD NOT FOUND\n'
+      'WAIT\n', lock)
+      wait(time_interval) #待機
 
 #実行部
 if __name__ == '__main__':
