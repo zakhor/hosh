@@ -118,10 +118,10 @@ def search_thread(section, time_interval, target, name, message):
       print_lock('THREAD FOUND\n'
       f'url_thread:\t{url_thread}\n', lock) 
       hosh(key.groups()[0], time_interval, target, name, message) #保守
-    else: #スレが見つからなければ保守間隔分待機
-      print_lock('THREAD NOT FOUND\n'
-      'WAIT\n', lock)
-      wait(time_interval) #待機
+  else: #スレが見つからなければ保守間隔分待機
+    print_lock('THREAD NOT FOUND\n'
+    'WAIT\n', lock)
+    wait(time_interval) #待機
 
 #実行部
 if __name__ == '__main__':
