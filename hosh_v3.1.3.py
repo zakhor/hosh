@@ -49,7 +49,7 @@ def print_lock(str, lock):
 #通知音を鳴らす
 def beep():
   if platform.system() == "Windows":
-    winsound.Beep(500, 50)
+    winsound.Beep(2500, 50)
   else:
     os.system('play -n synth %s sin %s' % (50/1000, 500))
 
