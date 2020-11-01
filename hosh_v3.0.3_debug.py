@@ -101,11 +101,6 @@ def hosh(domain, bbs, key, time_interval, target, name, message):
 
 #スレ検索
 def search_thread(th_num, time_interval, target, name, message):
-  print(
-  f'time_interval:\t{str(time_interval)}\n'
-  f'target:\t\t{target}\n'
-  f'name:\t\t{name}\n'
-  f'message:\t{message}')
   while 1:
     response = requests.get('https://' + domain + '.5ch.net/' + bbs + '/subback.html') #スレ一覧を開く
     response.encoding = response.apparent_encoding 
@@ -121,34 +116,18 @@ def search_thread(th_num, time_interval, target, name, message):
 
 #実行部
 if __name__ == '__main__':
-  #config_ini = configparser.ConfigParser()  #config.ini読み込み
-  #config_ini_path = 'config.ini'
-  #if not os.path.exists(config_ini_path):
-  #    raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), config_ini_path)
-  #config_ini.read(config_ini_path, encoding='utf-8')
-
-  test_config_list = [
-    [3540, 
-    '保守ツール',
-    '',
-    '保守メッセージ'],
-    [3480,
-    'コテ雑',
-    '',
-    '保守']
-  ]
+  config_ini = configparser.ConfigParser()  #config.ini読み込み
+  config_ini_path = 'config.ini'
+  if not os.path.exists(config_ini_path):
+    raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), config_ini_path)
+  config_ini.read(config_ini_path, encoding='utf-8')
 
   th_list = []
-  #for th_num in config_ini:
-    #time_interval = int(config_ini[th_num]['time_interval'])
-    #target = config_ini[th_num]['target']
-    #name = config_ini[th_num]['name']
-    #message = config_ini[th_num]['message']
-  for th_num in test_config_list:
-    time_interval = int(test_config_list[th_num][0])
-    target = config_ini[test_config_list][1]
-    name = config_ini[test_config_list][2]
-    message = config_ini[test_config_list][3]
+  for th_num in config_ini:
+    time_interval = int(config_ini[th_num]['time_interval'])
+    target = config_ini[th_num]['target']
+    name = config_ini[th_num]['name']
+    message = config_ini[th_num]['message']
     print(
     f'time_interval:\t{str(time_interval)}\n'
     f'target:\t\t{target}\n'
@@ -156,5 +135,4 @@ if __name__ == '__main__':
     f'message:\t{message}')
     th_list.append(threading.Thread(target=search_thread, args=(th_num, time_interval, target, name, message)))
   for th in th_list:
-    print(th)
     th.start()
