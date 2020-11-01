@@ -30,10 +30,10 @@ name = config_ini['DEFAULT']['name']
 message = config_ini['DEFAULT']['message']
 mail = str(time_interval) + "秒"
 print(
-'time_interval:\t' + str(time_interval) + '\n' +
-'target:\t\t' + target + '\n' +
-'name:\t\t' + name + '\n' +
-'message:\t' + message)
+f'time_interval:\t{str(time_interval)}\n'
+f'target:\t\t{target}\n'
+f'name:\t\t{name}\n'
+f'message:\t{message}')
 
 #正規表現
 pattern_find_thread = '<a href=\"([0-9]{10})/l50\">.+?' + target + '.+?</a>'
@@ -50,6 +50,7 @@ def beep():
     winsound.Beep(500, 50)
   else:
     os.system('play -n synth %s sin %s' % (50/1000, 500))
+
 #待機
 def wait(sec):
   for _ in tqdm(range(sec)):
@@ -86,7 +87,7 @@ def post_message(domain, bbs, key):
 #保守
 def hosh(domain, bbs, key):
   url_thread = 'https://' + domain + '.5ch.net/test/read.cgi/' + bbs + '/' + key + '/l0'
-  print('url:\t\t'+url_thread)
+  print(f'url_thread:\t{url_thread}')
   response = requests.get(url_thread) #スレを読み込む
 
   while not re.search(pattern_check_archived, response.text):  #dat落ちまで繰り返す
@@ -100,9 +101,9 @@ def hosh(domain, bbs, key):
     date_now = int(time.time()) + 60 * 60 * 9
     time_diff = date_now - date_latest
     print(
-    'date_latest:\t' + str(date_latest) + '\n' +
-    'date_now:\t' + str(date_now) + '\n' +
-    'time_diff:\t' + str(time_diff) + 'sec')
+    f'date_latest:\t{str(date_latest)}\n'
+    f'date_now:\t{str(date_now)}\n'
+    f'time_diff:\t{str(time_diff)}sec')
 
     if time_diff >= time_interval: #最終書き込み時刻からの経過時間が閾値を超えたら書き込む
       print('POST')
