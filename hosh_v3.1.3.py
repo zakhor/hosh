@@ -4,7 +4,6 @@ import re
 import time
 import tqdm
 import errno
-import asyncio
 import platform
 import requests
 import threading
