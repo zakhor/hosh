@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
   for section in config_ini: #並列処理化
     config = Config()
-    config.time_interval = 60
+    config.time_interval = 3480
     config.target = config_ini[section]['target']
     print_lock(
     f'section:\t{section}\n'
