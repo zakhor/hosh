@@ -70,25 +70,19 @@ def post_message(config):
     'method': 'POST',
     'path': '/test/bbs.cgi',
     'scheme': 'https',
-    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
     'accept-encoding': 'gzip, deflate, br',
     'accept-language': 'ja,en-US;q=0.9,en;q=0.8',
     'cache-control': 'max-age=0',
-    'content-length': '130',
+    'connection': 'keep-alive',
     'content-type': 'application/x-www-form-urlencoded',
     'origin': 'https://' + domain + '.5ch.net',
     'referer': config.url_thread,
-    'sec-ch-ua': '"Google Chrome";v="87", "\"Not;A\\Brand";v="99", "Chromium";v="87"',
-    'sec-ch-ua-mobile': '0',
-    'sec-fetch-dest': 'document',
-    'sec-fetch-mode': 'navigate',
-    'sec-fetch-site': 'same-origin',
-    'sec-fetch-user': '1',
     'upgrade-insecure-requests': '1',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.40 Safari/537.36',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0'
   }
   
-  cookies = {'yuki':'akari','READJS':''}  #cookieをセット
+  cookies = {'yuki':'akari', 'READJS':''}  #cookieをセット
   url_bbscgi = 'https://' + domain + '.5ch.net/test/bbs.cgi'
   r = requests.post(url_bbscgi,data=data,headers=headers,cookies=cookies)
   response = re.sub('<.*?>', '', str(r.text))
@@ -155,7 +149,7 @@ if __name__ == '__main__':
 
   for section in config_ini: #並列処理化
     config = Config()
-    config.time_interval = 3480
+    config.time_interval = 60
     config.target = config_ini[section]['target']
     print_lock(
     f'section:\t{section}\n'
