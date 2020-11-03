@@ -160,6 +160,5 @@ if __name__ == '__main__':
     config.target = config_ini[section]['target']
     print_lock(
     f'section:\t{section}\n'
-    f'time_interval:\t{str(config.time_interval)}\n'
     f'target:\t\t{config.target}\n', lock)
     threading.Thread(target=search_thread, args=(section, config)).start()
