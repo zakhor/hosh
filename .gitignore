@@ -31,8 +31,15 @@ env/
 
 [Ll]og/
 
-# egg
+# setup.py
 .eggs/
+dist/
+Hosh_Package*/
+
+# pyinstaller
+build/
+dist/
+*.spec
 
 # Visual Studio Code
 .vscode/

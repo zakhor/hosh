@@ -116,8 +116,7 @@ def hosh(config):
     if time_diff >= config.time_interval: #最終書き込み時刻からの経過時間が閾値を超えたら書き込む
       print_lock('POST\n'
       'WAIT\n', lock)
-      with lock:
-        post_message(config) #投稿
+      post_message(config) #投稿
     else: #超過予想時刻まで待機
       time_wait = config.time_interval - time_diff
       print_lock('NOT POST\n'
