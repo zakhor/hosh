@@ -21,9 +21,6 @@ class Config():
   def __init__(self):
     self.time_interval = 0
     self.target = ''
-    self.name = ''
-    self.message = ''
-    self.mail = ''
     self.key = ''
     self.url_thread = ''
 
@@ -61,18 +58,36 @@ def wait(sec):
 #投稿
 def post_message(config):
   time_now = str(int(time.time()))
+  name = ''
+  message = '保守'
+  mail = str(config.time_interval) + '秒'
   submit = "書き込む"
   oekaki_thread1 =""
-  data = {"FROM":config.name.encode("cp932"),"mail":config.mail.encode("cp932"),"MESSAGE":config.message.encode("cp932"),"bbs":bbs,"key":config.key,"time":time_now,"submit":submit.encode("cp932"),"oekaki_thread1":oekaki_thread1}  #POSTデータをセット
+  data = {"FROM":name.encode("cp932"),"mail":mail.encode("cp932"),"MESSAGE":message.encode("cp932"),"bbs":bbs,"key":config.key,"time":time_now,"submit":submit.encode("cp932"),"oekaki_thread1":oekaki_thread1}  #POSTデータをセット
+  
   headers = { #headerをセット
-  'referer': config.url_thread, 
-  'accept-encoding': 'zip, deflate, br', 
-  'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36', 
-  'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9', 
-  'accept-charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3', 
-  'accept-language': 'ja,en-US;q=0.9,en;q=0.8', 
-  'connection': 'keep-alive',
+    'authority': domain + '.5ch.net',
+    'method': 'POST',
+    'path': '/test/bbs.cgi',
+    'scheme': 'https',
+    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    'accept-encoding': 'gzip, deflate, br',
+    'accept-language': 'ja,en-US;q=0.9,en;q=0.8',
+    'cache-control': 'max-age=0',
+    'content-length': '130',
+    'content-type': 'application/x-www-form-urlencoded',
+    'origin': 'https://' + domain + '.5ch.net',
+    'referer': config.url_thread,
+    'sec-ch-ua': '"Google Chrome";v="87", "\"Not;A\\Brand";v="99", "Chromium";v="87"',
+    'sec-ch-ua-mobile': '0',
+    'sec-fetch-dest': 'document',
+    'sec-fetch-mode': 'navigate',
+    'sec-fetch-site': 'same-origin',
+    'sec-fetch-user': '1',
+    'upgrade-insecure-requests': '1',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.40 Safari/537.36',
   }
+  
   cookies = {'yuki':'akari','READJS':''}  #cookieをセット
   url_bbscgi = 'https://' + domain + '.5ch.net/test/bbs.cgi'
   r = requests.post(url_bbscgi,data=data,headers=headers,cookies=cookies)
@@ -101,11 +116,12 @@ def hosh(config):
     if time_diff >= config.time_interval: #最終書き込み時刻からの経過時間が閾値を超えたら書き込む
       print_lock('POST\n'
       'WAIT\n', lock)
-      post_message(config) #投稿
+      with lock:
+        post_message(config) #投稿
     else: #超過予想時刻まで待機
       time_wait = config.time_interval - time_diff
       print_lock('NOT POST\n'
-      'WAIT\n', lock)
+      'WAIT\n', lock) 
     wait(time_wait) #待機
     response = requests.get(config.url_thread)
   print_lock('THREAD ARCHIEVED\n', lock)
@@ -119,7 +135,7 @@ def search_thread(section, config):
     key = re.search(pattern_find_thread, response.text) #スレを検索
     if key: #スレが見つかったら保守
       config.key = key.groups()[0]
-      config.url_thread = 'https://' + domain + '.5ch.net/test/read.cgi/' + bbs + '/' + config.key + '/l0'
+      config.url_thread = 'https://' + domain + '.5ch.net/test/read.cgi/' + bbs + '/' + config.key + '/'
       print_lock('THREAD FOUND\n'
       f'target:\t\t{config.target}\n'
       f'url_thread:\t{config.url_thread}\n', lock) 
@@ -133,22 +149,17 @@ def search_thread(section, config):
 #実行部
 if __name__ == '__main__':
   config_ini = configparser.ConfigParser()  #config.ini読み込み
-  config_ini_path = 'config.ini'
+  config_ini_path = './config.ini'
   if not os.path.exists(config_ini_path):
     raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), config_ini_path)
   config_ini.read(config_ini_path, encoding='utf-8')
 
   for section in config_ini: #並列処理化
     config = Config()
-    config.time_interval = int(config_ini[section]['time_interval'])
+    config.time_interval = 3480
     config.target = config_ini[section]['target']
-    config.name = config_ini[section]['name']
-    config.message = config_ini[section]['message']
-    config.mail = str(config.time_interval) + "秒"
     print_lock(
     f'section:\t{section}\n'
     f'time_interval:\t{str(config.time_interval)}\n'
-    f'target:\t\t{config.target}\n'
-    f'name:\t\t{config.name}\n'
-    f'message:\t{config.message}\n', lock)
+    f'target:\t\t{config.target}\n', lock)
     threading.Thread(target=search_thread, args=(section, config)).start()
