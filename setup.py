@@ -9,7 +9,7 @@ def _requires_from_file(filename):
 
 setup(
     name="Hosh Package",
-    version="3.2.3",
+    version="3.2.4",
     author="zakhor",
     url="https://github.com/zakhor/hosh",
     packages=find_packages(""),

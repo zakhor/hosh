@@ -28,8 +28,10 @@ bld/
 
 # Python
 env/
-
 [Ll]og/
+
+# disable Actions
+github/
 
 # setup.py
 .eggs/
