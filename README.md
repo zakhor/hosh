@@ -8,7 +8,7 @@
 ~~2. Code→Download ZIPからファイルをダウンロード、展開する~~  
 ~~3. setup.batを実行する（もしくは`python setup.py install`を実行する）~~  
 ~~4. hosh_~.pyを実行する~~    
-バイナリファイル化しました。
+バイナリファイル化しました。Pythonインストール不要
 1. Releasesからhosh_~.zipをダウンロード、展開
 2. config.iniを書き換える
 3. hosh_v~.exeを実行
